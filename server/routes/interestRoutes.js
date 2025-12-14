@@ -1,23 +1,20 @@
-/**
- * 
-**/
-
 import express from "express";
 import { InterestModel } from "../models/InterestModel.js";
+
 const router = express.Router();
 
 /**
  * This route will display all interests.
 **/
 router.get('/', async (req, res) => {
-  try{
+  try {
     const interests = await InterestModel.find({});
     return res.status(200).json({
       count: interests.length,
       data: interests
     });
-  }catch{
-    console.log(error.message);
+  } catch (error) {
+    console.log('Error fetching interests:', error.message);
     res.status(500).send({message: error.message});
   }
 });

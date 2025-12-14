@@ -1,9 +1,4 @@
-/**
- * 
-**/
-
 import express from 'express'
-
 import { UserModel } from '../models/UserModel.js'
 import * as auth from '../controllers/AuthController.js'
 import * as user from '../controllers/UserController.js'
@@ -20,14 +15,14 @@ router.put('/:id', user.Update)
  * This route will display all users.
 **/
 router.get('/', async (req, res) => {
-  try{
+  try {
     const users = await UserModel.find({})
     return res.status(200).json({
       count: users.length,
       data: users
     })
-  }catch{
-    console.log(error.message)
+  } catch (error) {
+    console.log('Error fetching users:', error.message)
     res.status(500).json({message: error.message})
   }
 })
