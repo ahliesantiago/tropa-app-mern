@@ -24,7 +24,6 @@ import '../../assets/styles/Auth.css'
 const NewProfile = () => {
   const navigate = useNavigate()
 
-  const [userId, setUserId] = useState('')
   const [interestList, setInterestList] = useState([])
   const [nickname, setNickname] = useState('')
   const [gender, setGender] = useState('')
@@ -77,34 +76,30 @@ const NewProfile = () => {
     e.preventDefault()
     const username = localStorage.getItem('username')
     axios.get(`http://localhost:8080/users/${username}`)
-    .then(response => {
-      setUserId(response.data[0]._id)
-    })
-    .catch(error => {
-      console.log(error)
-    })
-
-    // Will edit the user's database record
-    axios.put(`http://localhost:8080/users/${userId}`, {
-      nickname,
-      gender,
-      pronouns,
-      location,
-      phoneNumber,
-      beliefIsLgbtFriendly,
-      beliefFood,
-      beliefReligion,
-      beliefPolitics,
-      about,
-      interests,
-    })
+      .then(response => {
+        const fetchedUserId = response.data[0]._id
+        return axios.put(`http://localhost:8080/users/${fetchedUserId}`, {
+          nickname,
+          gender,
+          pronouns,
+          location,
+          phoneNumber,
+          beliefIsLgbtFriendly,
+          beliefFood,
+          beliefReligion,
+          beliefPolitics,
+          about,
+          interests,
+        })
+      })
       .then(response => {
         if(response.status === 200) {
           navigate(`/profile/${username}`)
         }
       })
       .catch(error => {
-        console.log(error)
+        console.log('Error updating user:', error)
+        alert('Failed to update profile. Please try again.')
       })
   }
 
